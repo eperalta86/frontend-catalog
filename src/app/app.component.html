@@ -1,0 +1,35 @@
+<div class="container">
+  <h1>Backlog</h1>
+
+  <div class="form-panel">
+    <h3>Agregar Nuevo</h3>
+    
+    <input [(ngModel)]="newTitle" placeholder="Título (ej. God of War)" />
+    
+    <select [(ngModel)]="newType">
+      <option value="GAME">Videojuego</option>
+      <option value="MOVIE">Película</option>
+      <option value="SERIES">Serie</option>
+    </select>
+
+    <select [(ngModel)]="newStatus">
+      <option value="BACKLOG">Pendiente</option>
+      <option value="IN_PROGRESS">Jugando/Viendo</option>
+      <option value="FINISHED">Terminado</option>
+    </select>
+
+    <button (click)="save()">Guardar</button>
+  </div>
+
+  <div class="grid">
+    @for (item of mediaItems(); track item.id) {
+      <div class="card" [class]="item.type">
+        <h3>{{ item.title }}</h3>
+        <span class="badge">{{ item.type }}</span>
+        <small>{{ item.status }}</small>
+      </div>
+    } @empty {
+      <p>No tienes nada en tu lista. ¡Agrega algo!</p>
+    }
+  </div>
+</div>

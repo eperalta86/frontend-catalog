@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { MediaItem } from '../models/media.model'; 
+import { MediaItem } from '../models/media.model';
 
 @Injectable({ providedIn: 'root' })
 export class MediaService {
@@ -15,5 +15,9 @@ export class MediaService {
 
   create(title: string, type: string, status: string): Observable<MediaItem> {
     return this.http.post<MediaItem>(this.apiUrl, { title, type, status });
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

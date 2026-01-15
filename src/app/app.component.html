@@ -1,35 +1,75 @@
 <div class="container">
-  <h1>Backlog</h1>
+  <h1 class="text-center mb-4 fw-bold">Backlog 🎮 🎬</h1>
 
-  <div class="form-panel">
-    <h3>Agregar Nuevo</h3>
-    
-    <input [(ngModel)]="newTitle" placeholder="Título (ej. God of War)" />
-    
-    <select [(ngModel)]="newType">
-      <option value="GAME">Videojuego</option>
-      <option value="MOVIE">Película</option>
-      <option value="SERIES">Serie</option>
-    </select>
+  <div class="card shadow-sm mb-5 bg-light">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Agregar Nuevo Item</h5>
 
-    <select [(ngModel)]="newStatus">
-      <option value="BACKLOG">Pendiente</option>
-      <option value="IN_PROGRESS">Jugando/Viendo</option>
-      <option value="FINISHED">Terminado</option>
-    </select>
+      <div class="row g-2">
+        <div class="col-md-5">
+          <input [(ngModel)]="newTitle" type="text" class="form-control" placeholder="Título (ej. God of War)">
+        </div>
 
-    <button (click)="save()">Guardar</button>
+        <div class="col-md-3">
+          <select [(ngModel)]="newType" class="form-select">
+            <option value="GAME">Videojuego</option>
+            <option value="MOVIE">Película</option>
+            <option value="SERIES">Serie</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select [(ngModel)]="newStatus" class="form-select">
+            <option value="BACKLOG">Pendiente</option>
+            <option value="IN_PROGRESS">En Progreso</option>
+            <option value="FINISHED">Terminado</option>
+          </select>
+        </div>
+
+        <div class="col-md-1 d-grid">
+          <button (click)="save()" class="btn btn-primary">+</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="grid">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
     @for (item of mediaItems(); track item.id) {
-      <div class="card" [class]="item.type">
-        <h3>{{ item.title }}</h3>
-        <span class="badge">{{ item.type }}</span>
-        <small>{{ item.status }}</small>
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-header bg-transparent border-0 pt-3" [ngClass]="{
+                 'border-top border-4 border-danger': item.type === 'GAME',
+                 'border-top border-4 border-primary': item.type === 'MOVIE',
+                 'border-top border-4 border-warning': item.type === 'SERIES'
+               }">
+          <small class="text-muted fw-bold">{{ item.type }}</small>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">{{ item.title }}</h5>
+        </div>
+
+        <div class="card-footer bg-transparent border-0 pb-3 d-flex justify-content-between align-items-center">
+          <div>
+            @if (item.status === 'BACKLOG') {
+            <span class="badge bg-secondary">Pendiente</span>
+            } @else if (item.status === 'IN_PROGRESS') {
+            <span class="badge bg-info text-dark">Jugando/Viendo</span>
+            } @else {
+            <span class="badge bg-success">Terminado</span>
+            }
+          </div>
+
+          <button class="btn btn-outline-danger btn-sm" (click)="delete(item)">
+            🗑️
+          </button>
+        </div>
       </div>
+    </div>
     } @empty {
-      <p>No tienes nada en tu lista. ¡Agrega algo!</p>
+    <div class="col-12 text-center text-muted mt-5">
+      <h4>📭 Tu lista está vacía</h4>
+    </div>
     }
   </div>
 </div>

@@ -44,4 +44,11 @@ export class AppComponent implements OnInit {
         error: (err) => console.error('Error al guardar:', err)
       });
   }
+
+  delete(item: MediaItem) {
+  if (!confirm(`¿Seguro que quieres borrar "${item.title}"?`)) return;
+    this.mediaService.delete(item.id).subscribe(() => {
+      this.loadData();
+    });
+  }
 }

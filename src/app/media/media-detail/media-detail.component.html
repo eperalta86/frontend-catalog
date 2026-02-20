@@ -1,0 +1,93 @@
+<div class="container">
+
+    <!-- Botón volver -->
+    <div class="mb-4">
+        <button class="btn btn-outline-secondary btn-sm" (click)="volver()">
+            ← Volver
+        </button>
+    </div>
+
+    <!-- Info del item -->
+    @if (item(); as item) {
+    <div class="card shadow-sm mb-4 border-0" [ngClass]="{
+        'border-top border-4 border-danger': item.type === 'GAME',
+        'border-top border-4 border-primary': item.type === 'MOVIE',
+        'border-top border-4 border-warning': item.type === 'SERIES'
+      }">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <small class="text-muted fw-bold">{{ item.type }}</small>
+                    <h2 class="card-title mb-1">{{ item.title }}</h2>
+                </div>
+                <div>
+                    @if (item.status === 'BACKLOG') {
+                    <span class="badge bg-secondary">Pendiente</span>
+                    } @else if (item.status === 'IN_PROGRESS') {
+                    <span class="badge bg-info text-dark">En Progreso</span>
+                    } @else {
+                    <span class="badge bg-success">Terminado</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- Upload de imagen -->
+    <div class="card shadow-sm mb-4 bg-light border-0">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Agregar Imagen</h5>
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Tipo</label>
+                    <select [(ngModel)]="selectedImageType" class="form-select">
+                        @for (type of imageTypes; track type) {
+                        <option [value]="type">{{ type }}</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <label class="form-label small text-muted">Archivo</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="onFileSelected($event)" />
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button class="btn btn-primary" (click)="uploadImage()" [disabled]="!selectedFile">
+                        Subir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Galería -->
+    <h5 class="mb-3">Imágenes ({{ images().length }})</h5>
+
+    @if (images().length === 0) {
+    <div class="text-center text-muted py-5">
+        <p>📷 No hay imágenes todavía</p>
+    </div>
+    } @else {
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        @for (image of images(); track image.id) {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <img [src]="getImageUrl(image)" class="card-img-top" [alt]="image.originalFileName"
+                    style="height: 180px; object-fit: cover;" />
+                <div class="card-body py-2">
+                    <span class="badge bg-secondary mb-1">{{ image.imageType }}</span>
+                    <p class="card-text small text-muted mb-0">{{ image.originalFileName }}</p>
+                    <p class="card-text small text-muted">{{ formatFileSize(image.fileSize) }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pb-2">
+                    <button class="btn btn-outline-danger btn-sm w-100" (click)="deleteImage(image)">
+                        🗑️ Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+</div>

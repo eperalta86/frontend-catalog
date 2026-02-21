@@ -65,28 +65,34 @@
 
     @if (images().length === 0) {
     <div class="text-center text-muted py-5">
-        <p>📷 No hay imágenes todavía</p>
+        <p>No hay imágenes todavía</p>
     </div>
     } @else {
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
         @for (image of images(); track image.id) {
         <div class="col">
-            <div class="card h-100 shadow-sm border-0">
-                <img [src]="getImageUrl(image)" class="card-img-top" [alt]="image.originalFileName"
-                    style="height: 180px; object-fit: cover;" />
-                <div class="card-body py-2">
-                    <span class="badge bg-secondary mb-1">{{ image.imageType }}</span>
-                    <p class="card-text small text-muted mb-0">{{ image.originalFileName }}</p>
-                    <p class="card-text small text-muted">{{ formatFileSize(image.fileSize) }}</p>
+            <div class="gallery-card">
+
+                <div class="gallery-card-image" (click)="openImage(image)">
+                    <img [src]="getImageUrl(image)" [alt]="image.imageType" class="gallery-card-img" />
                 </div>
-                <div class="card-footer bg-transparent border-0 pb-2">
-                    <button class="btn btn-outline-danger btn-sm w-100" (click)="deleteImage(image)">
-                        🗑️ Eliminar
-                    </button>
+
+                <div class="gallery-card-info">
+                    <span class="badge bg-secondary">{{ image.imageType }}</span>
+                    <button class="btn btn-sm btn-outline-danger py-0" (click)="deleteImage(image)"
+                        title="Eliminar">🗑️</button>
                 </div>
+
             </div>
         </div>
         }
+    </div>
+    }
+
+    <!-- Overlay imagen ampliada -->
+    @if (modalImageUrl(); as url) {
+    <div class="image-overlay" (click)="closeImage()">
+        <img [src]="url" alt="Imagen ampliada" class="overlay-image" />
     </div>
     }
 

@@ -22,6 +22,7 @@ export class MediaDetailComponent implements OnInit {
 
     item = signal<MediaItem | null>(null);
     images = signal<MediaImage[]>([]);
+    modalImageUrl = signal<string | null>(null);
 
     selectedImageType: ImageType = 'COVER';
     selectedFile: File | null = null;
@@ -88,10 +89,12 @@ export class MediaDetailComponent implements OnInit {
         return this.mediaImageService.getImageUrl(id, image.id);
     }
 
-    formatFileSize(bytes: number): string {
-        if (bytes < 1024) return `${bytes} B`;
-        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    openImage(image: MediaImage) {
+        this.modalImageUrl.set(this.getImageUrl(image));
+    }
+
+    closeImage() {
+        this.modalImageUrl.set(null);
     }
 
     volver() {

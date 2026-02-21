@@ -1,7 +1,7 @@
 <div class="container">
-    <h1 class="text-center mb-4 fw-bold">Backlog 🎮 🎬</h1>
+    <h1 class="text-center mb-4 fw-bold">Backlog</h1>
 
-    <div class="card shadow-sm mb-5 bg-light">
+    <div class="card shadow-sm mb-5 bg-light border-0">
         <div class="card-body">
             <h5 class="card-title mb-3">Agregar Nuevo Item</h5>
             <div class="row g-2">
@@ -30,20 +30,23 @@
         </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
         @for (item of mediaItems(); track item.id) {
         <div class="col">
-            <div class="card h-100 shadow-sm border-0" [ngClass]="{
-            'border-top border-4 border-danger': item.type === 'GAME',
-            'border-top border-4 border-primary': item.type === 'MOVIE',
-            'border-top border-4 border-warning': item.type === 'SERIES'
-          }">
-                <div class="card-body">
-                    <small class="text-muted fw-bold">{{ item.type }}</small>
-                    <h5 class="card-title mt-1">{{ item.title }}</h5>
+            <div class="media-card">
+
+                <div class="media-card-image">
+                    @if (getCoverUrl(item.id); as url) {
+                    <img [src]="url" [alt]="item.title" class="media-card-img" />
+                    } @else {
+                    <div class="media-card-placeholder"></div>
+                    }
                 </div>
-                <div class="card-footer bg-transparent border-0 pb-3 d-flex justify-content-between align-items-center">
-                    <div>
+
+                <div class="media-card-info">
+                    <small class="media-card-type">{{ item.type }}</small>
+                    <p class="media-card-title text-truncate" [title]="item.title">{{ item.title }}</p>
+                    <div class="d-flex align-items-center justify-content-between">
                         @if (item.status === 'BACKLOG') {
                         <span class="badge bg-secondary">Pendiente</span>
                         } @else if (item.status === 'IN_PROGRESS') {
@@ -51,21 +54,20 @@
                         } @else {
                         <span class="badge bg-success">Terminado</span>
                         }
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-outline-secondary btn-sm" (click)="verDetalle(item)">
-                            🖼️
-                        </button>
-                        <button class="btn btn-outline-danger btn-sm" (click)="delete(item)">
-                            🗑️
-                        </button>
+                        <div class="d-flex gap-1">
+                            <button class="btn btn-sm btn-outline-secondary py-0" (click)="verDetalle(item)"
+                                title="Ver detalle">✏️</button>
+                            <button class="btn btn-sm btn-outline-danger py-0" (click)="delete(item)"
+                                title="Eliminar">🗑️</button>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
         } @empty {
         <div class="col-12 text-center text-muted mt-5">
-            <h4>📭 Tu lista está vacía</h4>
+            <h4>Tu lista está vacía</h4>
         </div>
         }
     </div>

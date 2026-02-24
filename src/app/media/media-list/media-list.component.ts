@@ -7,7 +7,8 @@ import { catchError } from 'rxjs/operators';
 
 import { MediaService } from '../../services/media.service';
 import { MediaImageService } from '../../services/media-image.service';
-import { MediaItem, MediaType, MediaStatus } from '../../models/media.model';
+import { PlatformService } from '../../services/platform.service';
+import { MediaItem, MediaStatus, Platform } from '../../models/media.model';
 
 @Component({
     selector: 'app-media-list',
@@ -19,17 +20,32 @@ import { MediaItem, MediaType, MediaStatus } from '../../models/media.model';
 export class MediaListComponent implements OnInit {
     private mediaService = inject(MediaService);
     private mediaImageService = inject(MediaImageService);
+    private platformService = inject(PlatformService);
     private router = inject(Router);
 
     mediaItems = signal<MediaItem[]>([]);
+    platforms = signal<Platform[]>([]);
     coverUrls = signal<Map<number, string>>(new Map());
 
     newTitle = '';
-    newType: MediaType = 'GAME';
+    newPlatformId: number | null = null;
     newStatus: MediaStatus = 'BACKLOG';
 
     ngOnInit() {
+        this.loadPlatforms();
         this.loadData();
+    }
+
+    loadPlatforms() {
+        this.platformService.getAll().subscribe({
+            next: (data) => {
+                this.platforms.set(data);
+                if (data.length > 0 && !this.newPlatformId) {
+                    this.newPlatformId = data[0].id;
+                }
+            },
+            error: (err) => console.error('Error al cargar plataformas:', err),
+        });
     }
 
     loadData() {
@@ -66,8 +82,8 @@ export class MediaListComponent implements OnInit {
     }
 
     save() {
-        if (!this.newTitle.trim()) return;
-        this.mediaService.create(this.newTitle, this.newType, this.newStatus).subscribe({
+        if (!this.newTitle.trim() || !this.newPlatformId) return;
+        this.mediaService.create(this.newTitle, this.newPlatformId, this.newStatus).subscribe({
             next: () => {
                 this.loadData();
                 this.newTitle = '';

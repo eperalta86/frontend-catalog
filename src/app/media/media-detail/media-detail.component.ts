@@ -68,7 +68,10 @@ export class MediaDetailComponent implements OnInit {
                 this.selectedFile = null;
                 this.loadImages(id);
             },
-            error: (err) => console.error('Error al subir imagen:', err),
+            error: (err) => {
+                console.error('Error al subir imagen:', err);
+                alert(err.error?.message || err.message || 'Error al subir imagen');
+            },
         });
     }
 

@@ -1,4 +1,3 @@
-export type MediaType = 'GAME' | 'MOVIE' | 'SERIES';
 export type MediaStatus = 'BACKLOG' | 'IN_PROGRESS' | 'FINISHED';
 
 export type ImageType =
@@ -10,6 +9,12 @@ export type ImageType =
   | 'SCREENSHOT'
   | 'MANUAL'
   | 'OTHER';
+
+export interface Platform {
+  id: number;
+  name: string;
+  shortName: string;
+}
 
 export interface MediaImage {
   id: number;
@@ -24,7 +29,7 @@ export interface MediaImage {
 export interface MediaItem {
   id: number;
   title: string;
-  type: MediaType;
+  platform: Platform;
   status: MediaStatus;
   releaseDate?: string;
   images?: MediaImage[];

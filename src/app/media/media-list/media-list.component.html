@@ -10,10 +10,10 @@
                         placeholder="Título (ej. God of War)" />
                 </div>
                 <div class="col-md-3">
-                    <select [(ngModel)]="newType" class="form-select">
-                        <option value="GAME">Videojuego</option>
-                        <option value="MOVIE">Película</option>
-                        <option value="SERIES">Serie</option>
+                    <select [(ngModel)]="newPlatformId" class="form-select">
+                        @for (p of platforms(); track p.id) {
+                        <option [ngValue]="p.id">{{ p.name }}</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="media-card-info">
-                    <small class="media-card-type">{{ item.type }}</small>
+                    <small class="media-card-type">{{ item.platform.shortName }}</small>
                     <p class="media-card-title text-truncate" [title]="item.title">{{ item.title }}</p>
                     <div class="d-flex align-items-center justify-content-between">
                         @if (item.status === 'BACKLOG') {

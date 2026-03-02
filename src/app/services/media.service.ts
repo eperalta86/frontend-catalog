@@ -2,16 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { MediaItem, MediaStatus } from '../models/media.model';
+import { MediaItem, MediaStatus, Page } from '../models/media.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class MediaService {
 
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/media';
+  private apiUrl = `${environment.apiUrl}/media`;
 
-  getAll(): Observable<MediaItem[]> {
-    return this.http.get<MediaItem[]>(this.apiUrl);
+  getAll(page = 0, size = 20, sort = 'title,asc'): Observable<Page<MediaItem>> {
+    return this.http.get<Page<MediaItem>>(
+      `${this.apiUrl}?page=${page}&size=${size}&sort=${sort}`
+    );
   }
 
   getById(id: number): Observable<MediaItem> {

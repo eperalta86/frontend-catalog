@@ -47,16 +47,16 @@ export class MediaListComponent implements OnInit {
             error: (err) => console.error('Error al cargar plataformas:', err),
         });
     }
-
+    
     loadData() {
-        this.mediaService.getAll().subscribe({
-            next: (items) => {
-                this.mediaItems.set(items);
-                this.loadCovers(items);
-            },
-            error: (err) => console.error('Error al cargar:', err),
-        });
-    }
+    this.mediaService.getAll().subscribe({
+        next: (page) => {
+            this.mediaItems.set(page.content);
+            this.loadCovers(page.content);
+        },
+        error: (err) => console.error('Error al cargar:', err),
+    });
+}
 
     loadCovers(items: MediaItem[]) {
         if (items.length === 0) return;

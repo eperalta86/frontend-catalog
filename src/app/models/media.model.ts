@@ -19,11 +19,10 @@ export interface Platform {
 export interface MediaImage {
   id: number;
   imageType: ImageType;
-  filePath: string;
   originalFileName: string;
   fileSize: number;
   contentType: string;
-  uploadedAt: string;
+  createdAt: string;
 }
 
 export interface MediaItem {
@@ -33,4 +32,14 @@ export interface MediaItem {
   status: MediaStatus;
   releaseDate?: string;
   images?: MediaImage[];
+}
+
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+  first: boolean;
+  last: boolean;
 }

@@ -1,1 +1,13 @@
+@if (authService.isLoggedIn()) {
+  <nav class="navbar navbar-dark bg-dark px-3">
+    <a class="navbar-brand" routerLink="/">Backlog Killer</a>
+    <div class="d-flex align-items-center gap-3">
+      <span class="text-light">{{ authService.currentUser() }}</span>
+      <button class="btn btn-outline-light btn-sm" (click)="authService.logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </nav>
+}
+
 <router-outlet />
